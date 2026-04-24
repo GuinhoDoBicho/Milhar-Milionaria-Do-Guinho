@@ -75,10 +75,14 @@
         .input-area {
             padding: 20px;
             text-align: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #milhar-input {
-            width: 100%;
+            width: 80%;
             border: none;
             font-size: 45px;
             font-weight: bold;
@@ -86,6 +90,20 @@
             text-align: center;
             outline: none;
             font-family: 'Courier New', Courier, monospace;
+        }
+
+        .btn-clear {
+            position: absolute;
+            right: 10px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            display: none;
         }
 
         .bicho-info-footer {
@@ -147,7 +165,7 @@
 
         tr:nth-child(even) td:not(.td-grupo) { background-color: var(--verde-claro); }
 
-        /* Botão Compartilhar */
+        /* Ações e Rodapé */
         .share-container {
             margin-top: 30px;
             width: 100%;
@@ -171,11 +189,8 @@
             transition: transform 0.2s;
         }
 
-        .btn-share:active {
-            transform: scale(0.95);
-        }
+        .btn-share:active { transform: scale(0.95); }
 
-        /* Rodapé Assinatura */
         .footer-assinatura {
             margin-top: 30px;
             padding: 20px;
@@ -187,7 +202,6 @@
             font-style: italic;
         }
 
-        /* Mobile */
         @media (max-width: 768px) {
             .container { flex-direction: column; align-items: center; }
             .card-input { width: 100%; max-width: 320px; }
@@ -208,6 +222,7 @@
             <div class="input-title">DIGITE A MILHAR DA<br>ÚLTIMA EXTRAÇÃO</div>
             <div class="input-area">
                 <input type="tel" id="milhar-input" maxlength="4" placeholder="0000" autocomplete="off">
+                <button class="btn-clear" id="btn-clear" onclick="limparInput()">X</button>
             </div>
             <div class="bicho-info-footer" id="bicho-info">
                 <span id="info-num">--</span>
@@ -256,12 +271,22 @@
     };
 
     const input = document.getElementById('milhar-input');
+    const btnClear = document.getElementById('btn-clear');
     const infoNum = document.getElementById('info-num');
     const infoNome = document.getElementById('info-nome');
     const corpoTabela = document.getElementById('resultado-corpo');
 
+    function limparInput() {
+        input.value = "";
+        btnClear.style.display = "none";
+        atualizarPuxada();
+        input.focus();
+    }
+
     function atualizarPuxada() {
         let milhar = input.value;
+        btnClear.style.display = milhar.length > 0 ? "block" : "none";
+
         if (milhar.length < 2) {
             corpoTabela.innerHTML = "";
             infoNum.innerText = "--";
@@ -270,8 +295,7 @@
         }
 
         let dezena = parseInt(milhar.slice(-2));
-        let grupo = Math.ceil(dezena / 4);
-        if (dezena === 0) grupo = 25;
+        let grupo = (dezena === 0) ? 25 : Math.ceil(dezena / 4);
         if (isNaN(grupo)) return;
 
         infoNum.innerText = grupo.toString().padStart(2, '0');
@@ -284,17 +308,19 @@
             let nomeBicho = bichoNomes[g - 1].toUpperCase();
             let tr = document.createElement('tr');
             
-            let milhares = [];
-            for(let i=0; i<4; i++) {
-                let dz;
-                if (g === 25) { 
-                    const dezenasVaca = ["97", "98", "99", "00"];
-                    dz = dezenasVaca[Math.floor(Math.random() * 4)];
-                } else {
-                    dz = (g * 4 - Math.floor(Math.random() * 4)).toString().padStart(2, '0');
-                }
-                milhares.push(`${Math.floor(Math.random() * 90 + 10)}${dz}`);
-            }
+            // DEZENAS DO BICHO ESPECÍFICO
+            const dezenasBicho = g === 25 ? ["97", "98", "99", "00"] : [
+                (g * 4 - 3).toString().padStart(2, '0'),
+                (g * 4 - 2).toString().padStart(2, '0'),
+                (g * 4 - 1).toString().padStart(2, '0'),
+                (g * 4).toString().padStart(2, '0')
+            ];
+
+            // GERAÇÃO TOTALMENTE ALEATÓRIA
+            let milhares = dezenasBicho.map(dz => {
+                let prefixo = Math.floor(Math.random() * 90 + 10); // Prefixo aleatório 10-99
+                return `${prefixo}${dz}`;
+            });
 
             tr.innerHTML = `
                 <td class="td-grupo">${g.toString().padStart(2, '0')}<br>${nomeBicho}</td>
@@ -314,22 +340,22 @@
         let texto = `🍀 *MILHAR MILIONÁRIA DO GUINHO* 🍀\n\n`;
         texto += `Milhar da Extração: *${milharDigitada}*\n`;
         texto += `Bicho: ${infoNome.innerText}\n\n`;
-        texto += `🚀 *SUGESTÕES DE PUXADA:*\n\n`;
+        texto += `🚀 *SUGESTÕES DE PUXADA:*\n`;
 
         const linhas = document.querySelectorAll('#resultado-corpo tr');
         linhas.forEach(linha => {
             const cells = linha.querySelectorAll('td');
             const bichoInfo = cells[0].innerText.replace('\n', ' ');
-            texto += `*${bichoInfo}*:\n`;
-            texto += `${cells[1].innerText} - ${cells[2].innerText} - ${cells[3].innerText} - ${cells[4].innerText}\n\n`;
+            texto += `\n*${bichoInfo}*:\n`;
+            texto += `👉 ${cells[1].innerText} - ${cells[2].innerText} - ${cells[3].innerText} - ${cells[4].innerText}\n`;
         });
 
-        texto += `Boa sorte! 💰\n_Criado por Guinho Do Bicho_`;
+        texto += `\nBoa sorte! 💰\n_Criado por Guinho Do Bicho_`;
 
         if (navigator.share) {
             try {
                 await navigator.share({ title: 'Milhar do Guinho', text: texto });
-            } catch (err) { console.log("Erro ao compartilhar"); }
+            } catch (err) { console.log("Cancelado"); }
         } else {
             navigator.clipboard.writeText(texto);
             alert("Resultados copiados! Cole no WhatsApp.");
