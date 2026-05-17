@@ -12,6 +12,7 @@
             --verde-escuro: #2E7D32;
             --azul-fundo: #B0C4DE;
             --botao-share: #25D366;
+            --laranja-alerta: #FF5722;
         }
 
         body {
@@ -23,71 +24,133 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            /* Impede seleção de texto para dificultar cópia */
-            user-select: none;
-        }
-
-        /* Bloqueio por Senha */
-        #login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #2c3e50;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: white;
-            text-align: center;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
+        /* --- TELA DE LOGIN --- */
         .login-box {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            width: 90%;
-            max-width: 350px;
-            color: #333;
-        }
-
-        .login-box h2 { color: var(--verde-escuro); margin-bottom: 20px; }
-        
-        .login-box input {
+            background-color: white;
+            border: 3px solid #000;
+            padding: 30px 20px;
             width: 100%;
-            padding: 15px;
-            font-size: 20px;
-            margin-bottom: 20px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            max-width: 350px;
             text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             box-sizing: border-box;
         }
 
-        .btn-acessar {
-            background-color: var(--verde-escuro);
-            color: white;
-            border: none;
+        .login-box h2 {
+            background-color: var(--amarelo);
+            margin: -30px -20px 20px -20px;
             padding: 15px;
-            width: 100%;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
+            border-bottom: 3px solid #000;
+            font-size: 20px;
+            font-style: italic;
         }
 
-        /* Cabeçalho Principal */
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #000;
+            margin-bottom: 15px;
+            text-align: center;
+            box-sizing: border-box;
+            font-weight: bold;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .login-box button {
+            color: white;
+            border: 2px solid #000;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-premium { background-color: var(--verde-escuro); }
+        .btn-teste { background-color: #34495e; }
+
+        .login-box button:active { transform: scale(0.98); }
+        
+        .error-message {
+            color: var(--vermelho);
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .expired-box {
+            background-color: #fce4ec;
+            border: 2px dashed var(--vermelho);
+            padding: 15px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .btn-buy-expired {
+            display: block;
+            background-color: var(--vermelho);
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            border: 2px solid #000;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* --- BOTÃO FLUTUANTE DE COMPRA (APENAS TESTE) --- */
+        .floating-buy {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--vermelho);
+            color: white;
+            padding: 15px 25px;
+            font-weight: bold;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            z-index: 9999;
+            border: 2px solid #fff;
+            font-size: 15px;
+            text-align: center;
+            display: none;
+            animation: pulse 2s infinite;
+            text-transform: uppercase;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- CONTEÚDO DO SISTEMA --- */
+        .system-container {
+            display: none; 
+            width: 100%;
+            max-width: 1000px;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .header-main {
             background-color: var(--amarelo);
             width: 100%;
-            max-width: 1000px;
             text-align: center;
             padding: 20px 0;
             border: 2px solid #000;
             margin-bottom: 20px;
+            box-sizing: border-box;
         }
 
         .header-main h1 {
@@ -98,18 +161,15 @@
             text-transform: uppercase;
         }
 
-        /* Container de Conteúdo */
         .container {
             display: flex;
             flex-direction: row;
             gap: 20px;
             width: 100%;
-            max-width: 1000px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        /* Lado Esquerdo: Input */
         .card-input {
             width: 300px;
             border: 2px solid #000;
@@ -144,6 +204,8 @@
             text-align: center;
             outline: none;
             font-family: 'Courier New', Courier, monospace;
+            user-select: text; 
+            -webkit-user-select: text;
         }
 
         .btn-clear {
@@ -169,7 +231,6 @@
             border-top: 2px solid #000;
         }
 
-        /* Lado Direito: Tabela */
         .card-tabela {
             flex-grow: 1;
             border: 2px solid #000;
@@ -180,50 +241,25 @@
         .tabela-title {
             background-color: var(--amarelo);
             text-align: center;
-            padding: 12px;            font-weight: bold;
+            padding: 12px;
+            font-weight: bold;
             font-size: 16px;
             border-bottom: 2px solid #000;
         }
 
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background-color: #2ecc71;
-            color: white;
-            padding: 10px;
-            border: 1px solid #000;
-        }
-
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #2ecc71; color: white; padding: 10px; border: 1px solid #000; }
         th.col-grupos { background-color: var(--vermelho); width: 25%; }
-
-        td {
-            border: 1px solid #000;
-            text-align: center;
-            padding: 15px 5px;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .td-grupo {
-            background-color: var(--verde-escuro);
-            color: white;
-        }
-
+        td { border: 1px solid #000; text-align: center; padding: 15px 5px; font-weight: bold; font-size: 18px; }
+        .td-grupo { background-color: var(--verde-escuro); color: white; }
         tr:nth-child(even) td:not(.td-grupo) { background-color: var(--verde-claro); }
 
-        /* Ações e Rodapé */
         .share-container {
             margin-top: 30px;
             width: 100%;
-            max-width: 1000px;
             text-align: center;
+            display: none; /* Exibido apenas se for Premium */
         }
 
         .btn-share {
@@ -255,102 +291,164 @@
             font-style: italic;
         }
 
+        /* DESIGN SIMÉTRICO PARA CELULAR */
         @media (max-width: 768px) {
+            body { justify-content: flex-start; }
             .container { flex-direction: column; align-items: center; }
             .card-input { width: 100%; max-width: 320px; }
-            .card-tabela { width: 100%; }
-            td, th { font-size: 14px; padding: 10px 2px; }
-            .header-main h1 { font-size: 20px; }
+            .card-tabela { width: 100%; border: none; background: transparent; }
+            .tabela-title { border: 2px solid #000; margin-bottom: 15px; }
+            .table-responsive { overflow-x: visible; }
+            table, thead, tbody, th, td, tr { display: block; }
+            thead { display: none; }
+            #resultado-corpo { display: flex; flex-direction: column; gap: 15px; }
+            tr { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid #000; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+            .td-grupo { grid-column: span 2; background-color: var(--verde-escuro); color: white; padding: 10px; font-size: 16px; border: none; border-bottom: 2px solid #000; }
+            td:not(.td-grupo) { border: 1px solid #ddd; padding: 12px 5px; font-size: 18px; }
+            .floating-buy { width: calc(100% - 40px); left: 20px; bottom: 10px; box-sizing: border-box; font-size: 13px; padding: 12px; }
         }
     </style>
 </head>
-<body oncontextmenu="return false" onkeydown="return false_atalhos(event)">
+<body>
 
-    <div id="login-overlay">
-        <div class="login-box">
-            <h2>Acesso Restrito</h2>
-            <p>Digite a chave de acesso para liberar as milhares:</p>
-            <input type="password" id="senha-acesso" placeholder="Código">
-            <button class="btn-acessar" onclick="verificarSenha()">ENTRAR</button>
+    <div class="login-box" id="login-screen">
+        <h2>SISTEMA PRIVADO<br>LIBERAR ACESSO</h2>
+        <input type="text" id="password-input" placeholder="DIGITE A SENHA" autocomplete="off">
+        <button class="btn-premium" onclick="verificarSenha()">ENTRAR COM SENHA</button>
+        <button class="btn-teste" id="btn-free-trial" onclick="iniciarTeste()">TESTAR GRÁTIS (3 ACESSOS)</button>
+        
+        <div class="error-message" id="error-msg">❌ SENHA INCORRETA!</div>
+        
+        <div class="expired-box" id="expired-msg">
+            <span>⚠️ Seus 3 acessos grátis acabaram!</span>
+            <a href="https://mpago.la/1dTcxGq" target="_blank" class="btn-buy-expired">COMPRAR VERSÃO COMPLETA</a>
         </div>
     </div>
 
-    <div class="header-main">
-        <h1>MILHAR MILIONÁRIA DO GUINHO</h1>
-    </div>
+    <a href="https://mpago.la/1dTcxGq" target="_blank" class="floating-buy" id="floating-buy-btn">
+        🛒 COMPRAR VERSÃO COMPLETA
+    </a>
 
-    <div class="container">
-        <div class="card-input">
-            <div class="input-title">DIGITE A MILHAR DA<br>ÚLTIMA EXTRAÇÃO</div>
-            <div class="input-area">
-                <input type="tel" id="milhar-input" maxlength="4" placeholder="0000" autocomplete="off">
-                <button class="btn-clear" id="btn-clear" onclick="limparInput()">X</button>
+    <div class="system-container" id="main-system">
+        <div class="header-main">
+            <h1>MILHAR MILIONÁRIA DO GUINHO</h1>
+        </div>
+
+        <div class="container">
+            <div class="card-input">
+                <div class="input-title">DIGITE A MILHAR DA<br>ÚLTIMA EXTRAÇÃO</div>
+                <div class="input-area">
+                    <input type="tel" id="milhar-input" maxlength="4" placeholder="0000" autocomplete="off">
+                    <button class="btn-clear" id="btn-clear" onclick="limparInput()">X</button>
+                </div>
+                <div class="bicho-info-footer" id="bicho-info">
+                    <span id="info-num">--</span>
+                    <span id="info-nome">AGUARDANDO</span>
+                </div>
             </div>
-            <div class="bicho-info-footer" id="bicho-info">
-                <span id="info-num">--</span>
-                <span id="info-nome">AGUARDANDO</span>
+
+            <div class="card-tabela">
+                <div class="tabela-title">MELHORES MILHARES A SEREM JOGADAS</div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="col-grupos">Grupos</th>
+                                <th>Milhares 1</th>
+                                <th>Milhares 2</th>
+                                <th>Milhares 3</th>
+                                <th>Milhares 4</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultado-corpo"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="card-tabela">
-            <div class="tabela-title">MELHORES MILHARES A SEREM JOGADAS</div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="col-grupos">Grupos</th>
-                            <th>Milhares 1</th>
-                            <th>Milhares 2</th>
-                            <th>Milhares 3</th>
-                            <th>Milhares 4</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultado-corpo"></tbody>
-                </table>
-            </div>
+        <div class="share-container" id="share-box">
+            <button class="btn-share" onclick="compartilharResultados()">
+                📤 COMPARTILHAR MILHARES
+            </button>
         </div>
-    </div>
 
-    <div class="share-container">
-        <button class="btn-share" onclick="compartilharResultados()">
-            📤 COMPARTILHAR MILHARES
-        </button>
+        <footer class="footer-assinatura">
+            Criado por Guinho Do Bicho
+        </footer>
     </div>
-
-    <footer class="footer-assinatura">
-        Criado por Guinho Do Bicho
-    </footer>
 
 <script>
-    // --- LÓGICA DE SEGURANÇA ---
-    const SENHA_CORRETA = "484646";
+    // --- SEGURANÇA: BLOQUEIO DE CÓDIGO FONTE ---
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12') e.preventDefault();
+        if (e.ctrlKey && (e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'i' || e.key === 'j') || e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
+            e.preventDefault();
+        }
+    });
+
+    // --- LOGICA DE ACESSOS E INICIALIZAÇÃO ---
+    window.onload = function() {
+        if (localStorage.getItem('guinho_autorizado') === 'true') {
+            exibirSistema('premium');
+        } else {
+            checarLimiteTeste();
+            document.getElementById('password-input').focus();
+        }
+    };
+
+    function checarLimiteTeste() {
+        let acessos = parseInt(localStorage.getItem('guinho_teste_count')) || 0;
+        if (acessos >= 3) {
+            document.getElementById('btn-free-trial').style.display = "none";
+            document.getElementById('expired-msg').style.display = "block";
+            return true;
+        }
+        return false;
+    }
 
     function verificarSenha() {
-        const senhaDigitada = document.getElementById('senha-acesso').value;
-        if (senhaDigitada === SENHA_CORRETA) {
-            localStorage.setItem('acesso_guinho_milhar', 'true');
-            document.getElementById('login-overlay').style.display = 'none';
+        const passwordInput = document.getElementById('password-input').value;
+        if (passwordInput === "M1LHARM1L1ONAR1A") {
+            localStorage.setItem('guinho_autorizado', 'true');
+            exibirSistema('premium');
         } else {
-            alert("Chave incorreta! Fale com o Guinho.");
+            document.getElementById('error-msg').style.display = "block";
         }
     }
 
-    function checarAcesso() {
-        if (localStorage.getItem('acesso_guinho_milhar') === 'true') {
-            document.getElementById('login-overlay').style.display = 'none';
-        }
+    function iniciarTeste() {
+        if (checarLimiteTeste()) return;
+
+        // Incrementa o uso do teste
+        let acessos = parseInt(localStorage.getItem('guinho_teste_count')) || 0;
+        acessos++;
+        localStorage.setItem('guinho_teste_count', acessos);
+
+        exibirSistema('teste');
     }
 
-    // Bloqueia F12, Ctrl+Shift+I, Ctrl+U (Visualizar código fonte)
-    function false_atalhos(e) {
-        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 85)) {
-            return false;
+    function exibirSistema(tipoUsuario) {
+        document.getElementById('login-screen').style.display = "none";
+        document.getElementById('main-system').style.display = "flex";
+
+        if (tipoUsuario === 'premium') {
+            document.getElementById('share-box').style.display = "block";
+            document.getElementById('floating-buy-btn').style.display = "none";
+        } else if (tipoUsuario === 'teste') {
+            document.getElementById('share-box').style.display = "none";
+            document.getElementById('floating-buy-btn').style.display = "block";
         }
+        document.getElementById('milhar-input').focus();
     }
 
-    // --- LÓGICA DO SITE (MANTIDA) ---
+    document.getElementById('password-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') verificarSenha();
+    });
+
+    // --- LÓGICA DO SISTEMA (PRESERVADA INTACTA) ---
     const bichoNomes = ["Avestruz", "Águia", "Burro", "Borboleta", "Cachorro", "Cabra", "Carneiro", "Camelo", "Cobra", "Coelho", "Cavalo", "Elefante", "Galo", "Gato", "Jacaré", "Leão", "Macaco", "Porco", "Pavão", "Peru", "Touro", "Tigre", "Urso", "Veado", "Vaca"];
-    
+
     const puxadas = {
         1: [18, 19, 20, 2], 2: [1, 3, 5, 4], 3: [2, 4, 6, 5], 4: [3, 5, 7, 6], 5: [4, 6, 8, 7],
         6: [5, 7, 9, 8], 7: [6, 8, 10, 9], 8: [7, 9, 11, 10], 9: [18, 19, 20, 10], 10: [9, 11, 13, 12],
@@ -387,7 +485,7 @@
         let grupo = (dezena === 0) ? 25 : Math.ceil(dezena / 4);
         if (isNaN(grupo)) return;
 
-        infoNum.innerText = grupo.toString().padStart(2, '0');
+        infoNum.innerText = groupText = grupo.toString().padStart(2, '0');
         infoNome.innerText = bichoNomes[grupo - 1].toUpperCase();
 
         corpoTabela.innerHTML = "";
@@ -396,6 +494,7 @@
         listaParaMostrar.forEach(g => {
             let nomeBicho = bichoNomes[g - 1].toUpperCase();
             let tr = document.createElement('tr');
+            
             const dezenasBicho = g === 25 ? ["97", "98", "99", "00"] : [
                 (g * 4 - 3).toString().padStart(2, '0'),
                 (g * 4 - 2).toString().padStart(2, '0'),
@@ -409,7 +508,7 @@
             });
 
             tr.innerHTML = `
-                <td class="td-grupo">${g.toString().padStart(2, '0')}<br>${nomeBicho}</td>
+                <td class="td-grupo">${g.toString().padStart(2, '0')} - ${nomeBicho}</td>
                 ${milhares.map(m => `<td>${m}</td>`).join('')}
             `;
             corpoTabela.appendChild(tr);
@@ -452,11 +551,6 @@
         if (input.value.length > 4) input.value = input.value.slice(0, 4);
         atualizarPuxada();
     });
-
-    window.onload = () => {
-        checarAcesso();
-        input.focus();
-    };
 </script>
 </body>
 </html>
