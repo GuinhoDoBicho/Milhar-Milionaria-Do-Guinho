@@ -1,556 +1,679 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Milhar Milionária do Guinho</title>
     <style>
-        :root {
-            --amarelo: #FFC107;
-            --vermelho: #FF0000;
-            --verde-claro: #E8F5E9;
-            --verde-escuro: #2E7D32;
-            --azul-fundo: #B0C4DE;
-            --botao-share: #25D366;
-            --laranja-alerta: #FF5722;
+        /* Configurações Gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--azul-fundo);
-            margin: 0;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            justify-content: center;
-            user-select: none;
+            background-color: #f0f4f1;
+            color: #333;
+            user-select: none; 
             -webkit-user-select: none;
         }
 
-        /* --- TELA DE LOGIN --- */
-        .login-box {
-            background-color: white;
-            border: 3px solid #000;
-            padding: 30px 20px;
-            width: 100%;
-            max-width: 350px;
+        /* =======================================================
+           TELA DE LOGIN / ACESSO PRIVADO
+           ======================================================= */
+        #loginOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 51, 24, 0.96);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .login-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            box-sizing: border-box;
+            border-top: 6px solid #e5a922;
         }
 
-        .login-box h2 {
-            background-color: var(--amarelo);
-            margin: -30px -20px 20px -20px;
-            padding: 15px;
-            border-bottom: 3px solid #000;
-            font-size: 20px;
-            font-style: italic;
+        .login-card h2 {
+            color: #004d26;
+            margin-bottom: 5px;
+            font-size: 22px;
+            text-transform: uppercase;
         }
 
-        .login-box input {
+        .login-card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .login-card input {
             width: 100%;
             padding: 12px;
-            font-size: 16px;
-            border: 2px solid #000;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             margin-bottom: 15px;
+            font-size: 16px;
             text-align: center;
-            box-sizing: border-box;
             font-weight: bold;
-            user-select: text;
-            -webkit-user-select: text;
+            color: #004d26;
         }
 
-        .login-box button {
-            color: white;
-            border: 2px solid #000;
-            padding: 12px 25px;
-            font-size: 16px;
+        .login-card button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
             margin-bottom: 10px;
+            transition: background 0.2s, transform 0.1s;
         }
 
-        .btn-premium { background-color: var(--verde-escuro); }
-        .btn-teste { background-color: #34495e; }
+        .login-card button:active { transform: scale(0.98); }
 
-        .login-box button:active { transform: scale(0.98); }
-        
-        .error-message {
-            color: var(--vermelho);
-            font-weight: bold;
-            margin-top: 10px;
-            display: none;
-            font-size: 14px;
-        }
+        .btn-senha { background-color: #004d26; color: white; }
+        .btn-senha:hover { background-color: #036c37; }
 
-        .expired-box {
-            background-color: #fce4ec;
-            border: 2px dashed var(--vermelho);
-            padding: 15px;
-            margin-top: 10px;
-            display: none;
-        }
+        .btn-teste { background-color: #e5a922; color: white; }
+        .btn-teste:hover { background-color: #cc9418; }
 
-        .btn-buy-expired {
-            display: block;
-            background-color: var(--vermelho);
-            color: white;
-            padding: 12px;
-            font-weight: bold;
-            text-decoration: none;
-            border: 2px solid #000;
-            margin-top: 10px;
-            text-transform: uppercase;
-        }
-
-        /* --- BOTÃO FLUTUANTE DE COMPRA (APENAS TESTE) --- */
-        .floating-buy {
+        /* =======================================================
+           BOTÃO FLUTUANTE DE COMPRA (VERSÃO TESTE)
+           ======================================================= */
+        .btn-flutuante {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--vermelho);
+            bottom: 25px;
+            right: 25px;
+            background-color: #ff3b30;
             color: white;
-            padding: 15px 25px;
-            font-weight: bold;
+            padding: 16px 24px;
             border-radius: 50px;
+            font-weight: bold;
             text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 6px 20px rgba(255,59,48,0.5);
             z-index: 9999;
-            border: 2px solid #fff;
-            font-size: 15px;
+            font-size: 14px;
             text-align: center;
-            display: none;
-            animation: pulse 2s infinite;
-            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulsar 2s infinite;
+            display: none; 
+            border: 2px solid white;
         }
 
-        @keyframes pulse {
+        @keyframes pulsar {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.06); }
             100% { transform: scale(1); }
         }
 
-        /* --- CONTEÚDO DO SISTEMA --- */
-        .system-container {
-            display: none; 
-            width: 100%;
-            max-width: 1000px;
-            flex-direction: column;
+        /* Topo / Header */
+        header {
+            background-color: #004d26;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
+            border-bottom: 5px solid #e5a922;
         }
 
-        .header-main {
-            background-color: var(--amarelo);
-            width: 100%;
-            text-align: center;
-            padding: 20px 0;
-            border: 2px solid #000;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-        }
-
-        .header-main h1 {
-            margin: 0;
-            font-size: 26px;
-            font-weight: 900;
-            font-style: italic;
+        .logo-area h1 {
+            color: #e5a922;
+            font-size: 24px;
             text-transform: uppercase;
         }
 
-        .container {
-            display: flex;
-            flex-direction: row;
-            gap: 20px;
-            width: 100%;
-            justify-content: center;
-            flex-wrap: wrap;
+        .logo-area p {
+            font-size: 12px;
+            color: #a3cda3;
+            letter-spacing: 1px;
         }
 
-        .card-input {
-            width: 300px;
-            border: 2px solid #000;
-            flex-shrink: 0;
-            background: white;
-        }
-
-        .input-title {
-            background-color: var(--vermelho);
+        nav a {
             color: white;
-            text-align: center;
-            padding: 10px;
+            text-decoration: none;
+            margin-left: 20px;
             font-weight: bold;
             font-size: 14px;
         }
 
-        .input-area {
-            padding: 20px;
-            text-align: center;
-            position: relative;
+        /* Container Principal */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
         }
 
-        #milhar-input {
-            width: 80%;
-            border: none;
-            font-size: 45px;
-            font-weight: bold;
-            color: var(--verde-escuro);
+        /* Coluna da Esquerda (Sidebar) */
+        .sidebar {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
-            outline: none;
-            font-family: 'Courier New', Courier, monospace;
-            user-select: text; 
-            -webkit-user-select: text;
+        }
+
+        .card-green {
+            background-color: #004d26;
+            color: white;
+        }
+
+        .card-green h3 {
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        /* Estrutura do Campo do Milhar + Botão X */
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .input-milhar {
+            width: 100%;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 42px;
+            font-weight: bold;
+            color: #004d26;
+            text-align: center;
+            padding: 10px 45px 10px 10px;
+        }
+
+        .input-milhar::-webkit-outer-spin-button,
+        .input-milhar::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .btn-clear {
             position: absolute;
-            right: 10px;
-            background: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 28px;
             font-weight: bold;
-            color: #666;
-            display: none;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
         }
 
-        .bicho-info-footer {
-            background-color: #2ecc71;
+        .btn-clear:hover { color: #cc0000; }
+
+        .grupo-info {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 16px;
+            background: rgba(0,0,0,0.2);
             padding: 10px;
-            font-weight: bold;
-            border-top: 2px solid #000;
+            border-radius: 6px;
         }
 
-        .card-tabela {
-            flex-grow: 1;
-            border: 2px solid #000;
-            background-color: white;
-            min-width: 320px;
+        /* Coluna da Direita (Painel de Resultados) */
+        .main-panel {
+            flex: 3;
+            min-width: 300px;
         }
 
-        .tabela-title {
-            background-color: var(--amarelo);
-            text-align: center;
-            padding: 12px;
-            font-weight: bold;
-            font-size: 16px;
-            border-bottom: 2px solid #000;
-        }
-
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background-color: #2ecc71; color: white; padding: 10px; border: 1px solid #000; }
-        th.col-grupos { background-color: var(--vermelho); width: 25%; }
-        td { border: 1px solid #000; text-align: center; padding: 15px 5px; font-weight: bold; font-size: 18px; }
-        .td-grupo { background-color: var(--verde-escuro); color: white; }
-        tr:nth-child(even) td:not(.td-grupo) { background-color: var(--verde-claro); }
-
-        .share-container {
-            margin-top: 30px;
-            width: 100%;
-            text-align: center;
-            display: none; /* Exibido apenas se for Premium */
-        }
-
-        .btn-share {
-            background-color: var(--botao-share);
-            color: white;
-            border: 2px solid #128C7E;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-
-        .btn-share:active { transform: scale(0.95); }
-
-        .footer-assinatura {
-            margin-top: 30px;
+        .table-card {
+            background: white;
+            border-radius: 12px;
             padding: 20px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #2c3e50;
-            text-align: center;
-            width: 100%;
-            font-style: italic;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow-x: auto;
         }
 
-        /* DESIGN SIMÉTRICO PARA CELULAR */
+        .table-title {
+            font-size: 18px;
+            color: #111;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* Tabela Personalizada */
+        .tabela-milhares {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .tabela-milhares th {
+            background-color: #e5a922;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tabela-milhares th.col-grupo { background-color: #004d26; }
+
+        .tabela-milhares td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .tabela-milhares tr:nth-child(even) { background-color: #f9fbf9; }
+
+        .btn-compartilhar {
+            background-color: #004d26;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-compartilhar:hover { background-color: #036c37; }
+
+        /* Rodapé de Vantagens */
+        .vantagens {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .vantagem-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            border-left: 4px solid #e5a922;
+        }
+
+        .vantagem-item h4 { color: #e5a922; margin-bottom: 5px; }
+        .vantagem-item p { font-size: 13px; color: #666; }
+
+        footer {
+            background-color: #003318;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            margin-top: 40px;
+        }
+
+        /* RESPONSIVIDADE PARA TELEMÓVEL */
         @media (max-width: 768px) {
-            body { justify-content: flex-start; }
-            .container { flex-direction: column; align-items: center; }
-            .card-input { width: 100%; max-width: 320px; }
-            .card-tabela { width: 100%; border: none; background: transparent; }
-            .tabela-title { border: 2px solid #000; margin-bottom: 15px; }
-            .table-responsive { overflow-x: visible; }
-            table, thead, tbody, th, td, tr { display: block; }
-            thead { display: none; }
-            #resultado-corpo { display: flex; flex-direction: column; gap: 15px; }
-            tr { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid #000; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-            .td-grupo { grid-column: span 2; background-color: var(--verde-escuro); color: white; padding: 10px; font-size: 16px; border: none; border-bottom: 2px solid #000; }
-            td:not(.td-grupo) { border: 1px solid #ddd; padding: 12px 5px; font-size: 18px; }
-            .floating-buy { width: calc(100% - 40px); left: 20px; bottom: 10px; box-sizing: border-box; font-size: 13px; padding: 12px; }
+            header { flex-direction: column; gap: 15px; text-align: center; }
+            nav a { margin: 0 10px; }
+            .container { margin: 15px auto; gap: 20px; }
+            .sidebar, .main-panel { flex: 1 1 100%; }
+            .tabela-milhares th, .tabela-milhares td { padding: 10px 5px; font-size: 14px; }
+            .logo-area h1 { font-size: 20px; }
+            .btn-flutuante {
+                bottom: 0; right: 0; left: 0;
+                border-radius: 0; font-size: 13px; padding: 14px;
+                border: none; border-top: 2px solid white;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="login-box" id="login-screen">
-        <h2>SISTEMA PRIVADO<br>LIBERAR ACESSO</h2>
-        <input type="text" id="password-input" placeholder="DIGITE A SENHA" autocomplete="off">
-        <button class="btn-premium" onclick="verificarSenha()">ENTRAR COM SENHA</button>
-        <button class="btn-teste" id="btn-free-trial" onclick="iniciarTeste()">TESTAR GRÁTIS (3 ACESSOS)</button>
-        
-        <div class="error-message" id="error-msg">❌ SENHA INCORRETA!</div>
-        
-        <div class="expired-box" id="expired-msg">
-            <span>⚠️ Seus 3 acessos grátis acabaram!</span>
-            <a href="https://mpago.la/1dTcxGq" target="_blank" class="btn-buy-expired">COMPRAR VERSÃO COMPLETA</a>
+    <div id="loginOverlay">
+        <div class="login-card">
+            <h2>Acesso Restrito</h2>
+            <p>Milhar Milionária do Guinho</p>
+            
+            <input type="password" id="senhaInput" placeholder="Digite a Senha Secreta">
+            <button class="login-btn btn-senha" onclick="validarSenha()">Entrar com Senha 🔑</button>
+            
+            <div style="margin: 15px 0; color: #aaa; font-size: 12px;">OU SE PREFERIR</div>
+            
+            <button class="login-btn btn-teste" id="btnTesteAcesso" onclick="entrarComoTeste()">Acesso de Teste Grátis</button>
         </div>
     </div>
 
-    <a href="https://mpago.la/1dTcxGq" target="_blank" class="floating-buy" id="floating-buy-btn">
-        🛒 COMPRAR VERSÃO COMPLETA
+    <a id="comprarBtn" href="https://mpago.la/1dTcxGq" target="_blank" class="btn-flutuante">
+        COMPRE A VERSÃO COMPLETA AQUI 🚀
     </a>
 
-    <div class="system-container" id="main-system">
-        <div class="header-main">
-            <h1>MILHAR MILIONÁRIA DO GUINHO</h1>
+    <header>
+        <div class="logo-area">
+            <h1>Milhar Milionária do Guinho</h1>
+            <p>SUA SORTE, SUAS CHANCES, SEU MILHÃO!</p>
         </div>
+        <nav>
+            <a href="#">INÍCIO</a>
+            <a href="#">RESULTADOS</a>
+            <a href="#">COMO JOGAR</a>
+        </nav>
+    </header>
 
-        <div class="container">
-            <div class="card-input">
-                <div class="input-title">DIGITE A MILHAR DA<br>ÚLTIMA EXTRAÇÃO</div>
-                <div class="input-area">
-                    <input type="tel" id="milhar-input" maxlength="4" placeholder="0000" autocomplete="off">
-                    <button class="btn-clear" id="btn-clear" onclick="limparInput()">X</button>
+    <div class="container">
+        
+        <div class="sidebar">
+            <div class="card card-green">
+                <h3>Digite a Milhar da Última Extração</h3>
+                
+                <div class="input-wrapper">
+                    <input type="number" id="inputMilhar" class="input-milhar" placeholder="0000" min="0" max="9999" value="1693" oninput="calcularPuxada()">
+                    <button class="btn-clear" onclick="limparInput()" title="Limpar tudo">&times;</button>
                 </div>
-                <div class="bicho-info-footer" id="bicho-info">
-                    <span id="info-num">--</span>
-                    <span id="info-nome">AGUARDANDO</span>
-                </div>
-            </div>
 
-            <div class="card-tabela">
-                <div class="tabela-title">MELHORES MILHARES A SEREM JOGADAS</div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="col-grupos">Grupos</th>
-                                <th>Milhares 1</th>
-                                <th>Milhares 2</th>
-                                <th>Milhares 3</th>
-                                <th>Milhares 4</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resultado-corpo"></tbody>
-                    </table>
+                <div class="grupo-info">
+                    <span id="txtNumeroGrupo">24</span>
+                    <span id="txtNomeGrupo">VEADO</span>
                 </div>
             </div>
+
+            <div class="card">
+                <h3 style="color: #004d26; margin-bottom: 10px;">BOA SORTE!</h3>
+                <p style="font-size: 40px;">🍀</p>
+                <p style="font-size: 12px; color: #777; margin-top: 10px;">Acredite, jogue e boa sorte!</p>
+            </div>
         </div>
 
-        <div class="share-container" id="share-box">
-            <button class="btn-share" onclick="compartilharResultados()">
-                📤 COMPARTILHAR MILHARES
-            </button>
+        <div class="main-panel">
+            <div class="table-card">
+                <div class="table-title">Melhores Milhares a Serem Jogadas</div>
+                
+                <table class="tabela-milhares">
+                    <thead>
+                        <tr>
+                            <th class="col-grupo">Grupos</th>
+                            <th>Milhares 1</th>
+                            <th>Milhares 2</th>
+                            <th>Milhares 3</th>
+                            <th>Milhares 4</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela">
+                        </tbody>
+                </table>
+
+                <button id="compartilharBtn" class="btn-compartilhar" onclick="compartilharMilhares()">Compartilhar Milhares 📲</button>
+            </div>
         </div>
 
-        <footer class="footer-assinatura">
-            Criado por Guinho Do Bicho
-        </footer>
     </div>
 
-<script>
-    // --- SEGURANÇA: BLOQUEIO DE CÓDIGO FONTE ---
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'F12') e.preventDefault();
-        if (e.ctrlKey && (e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'i' || e.key === 'j') || e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
-            e.preventDefault();
-        }
-    });
+    <div class="vantagens">
+        <div class="vantagem-item">
+            <h4>PRATICIDADE</h4>
+            <p>Resultados atualizados e fáceis de consultar.</p>
+        </div>
+        <div class="vantagem-item">
+            <h4>CONFIANÇA</h4>
+            <p>Informações seguras e transparentes.</p>
+        </div>
+        <div class="vantagem-item">
+            <h4>AGILIDADE</h4>
+            <p>Encontre as melhores milhares em segundos.</p>
+        </div>
+        <div class="vantagem-item">
+            <h4>TRADIÇÃO</h4>
+            <p>A tradição que aumenta suas chances.</p>
+        </div>
+    </div>
 
-    // --- LOGICA DE ACESSOS E INICIALIZAÇÃO ---
-    window.onload = function() {
-        if (localStorage.getItem('guinho_autorizado') === 'true') {
-            exibirSistema('premium');
-        } else {
-            checarLimiteTeste();
-            document.getElementById('password-input').focus();
-        }
-    };
+    <footer>
+        Milhar Milionária do Guinho © 2026 - Todos os direitos reservados. | Jogue com responsabilidade.
+    </footer>
 
-    function checarLimiteTeste() {
-        let acessos = parseInt(localStorage.getItem('guinho_teste_count')) || 0;
-        if (acessos >= 3) {
-            document.getElementById('btn-free-trial').style.display = "none";
-            document.getElementById('expired-msg').style.display = "block";
-            return true;
-        }
-        return false;
-    }
+    <script>
+        const SENHA_CORRETA = "M1LHARM1L1ONAR1A";
 
-    function verificarSenha() {
-        const passwordInput = document.getElementById('password-input').value;
-        if (passwordInput === "M1LHARM1L1ONAR1A") {
-            localStorage.setItem('guinho_autorizado', 'true');
-            exibirSistema('premium');
-        } else {
-            document.getElementById('error-msg').style.display = "block";
-        }
-    }
+        // Lista de grupos e dezenas oficiais do Jogo do Bicho
+        const gruposBicho = [
+            { id: 1, nome: "Avestruz", dezenas: ["01", "02", "03", "04"] },
+            { id: 2, nome: "Águia", dezenas: ["05", "06", "07", "08"] },
+            { id: 3, nome: "Burro", dezenas: ["09", "10", "11", "12"] },
+            { id: 4, nome: "Borboleta", dezenas: ["13", "14", "15", "16"] },
+            { id: 5, nome: "Cachorro", dezenas: ["17", "18", "19", "20"] },
+            { id: 6, nome: "Cabra", dezenas: ["21", "22", "23", "24"] },
+            { id: 7, nome: "Carneiro", dezenas: ["25", "26", "27", "28"] },
+            { id: 8, nome: "Camelo", dezenas: ["29", "30", "31", "32"] },
+            { id: 9, nome: "Cobra", dezenas: ["33", "34", "35", "36"] },
+            { id: 10, nome: "Coelho", dezenas: ["37", "38", "39", "40"] },
+            { id: 11, nome: "Cavalo", dezenas: ["41", "42", "43", "44"] },
+            { id: 12, nome: "Elefante", dezenas: ["45", "46", "47", "48"] },
+            { id: 13, nome: "Galo", dezenas: ["49", "50", "51", "52"] },
+            { id: 14, nome: "Gato", dezenas: ["53", "54", "55", "56"] },
+            { id: 15, nome: "Jacaré", dezenas: ["57", "58", "59", "60"] },
+            { id: 16, nome: "Leão", dezenas: ["61", "62", "63", "64"] },
+            { id: 17, nome: "Macaco", dezenas: ["65", "66", "67", "68"] },
+            { id: 18, nome: "Porco", dezenas: ["69", "70", "71", "72"] },
+            { id: 19, nome: "Pavão", dezenas: ["73", "74", "75", "76"] },
+            { id: 20, nome: "Peru", dezenas: ["77", "78", "79", "80"] },
+            { id: 21, nome: "Touro", dezenas: ["81", "82", "83", "84"] },
+            { id: 22, nome: "Tigre", dezenas: ["85", "86", "87", "88"] },
+            { id: 23, nome: "Urso", dezenas: ["89", "90", "91", "92"] },
+            { id: 24, nome: "Veado", dezenas: ["93", "94", "95", "96"] },
+            { id: 25, nome: "Vaca", dezenas: ["97", "98", "99", "00"] }
+        ];
 
-    function iniciarTeste() {
-        if (checarLimiteTeste()) return;
+        // PADRÃO DE PUXADAS FIXAS ATUALIZADO COM EXATAMENTE 4 GRUPOS POR BICHO
+        const tabelaPuxadas = {
+            1: [8, 15, 22, 4],     // Avestruz
+            2: [9, 16, 23, 5],     // Águia
+            3: [10, 17, 24, 6],    // Burro
+            4: [11, 18, 25, 7],    // Borboleta
+            5: [12, 19, 1, 8],     // Cachorro
+            6: [13, 20, 2, 9],     // Cabra
+            7: [14, 21, 3, 10],    // Carneiro
+            8: [15, 22, 4, 11],    // Camelo
+            9: [16, 23, 5, 12],    // Cobra
+            10: [17, 24, 6, 13],   // Coelho
+            11: [18, 25, 7, 14],   // Cavalo
+            12: [19, 1, 8, 15],    // Elefante
+            13: [20, 2, 9, 16],    // Galo
+            14: [21, 3, 10, 17],   // Gato
+            15: [22, 4, 11, 18],   // Jacaré
+            16: [23, 5, 12, 19],   // Leão
+            17: [24, 6, 13, 20],   // Macaco
+            18: [25, 7, 14, 21],   // Porco
+            19: [1, 8, 15, 22],    // Pavão
+            20: [2, 9, 16, 23],    // Peru
+            21: [3, 10, 17, 24],   // Touro
+            22: [4, 11, 18, 25],   // Tigre
+            23: [5, 12, 19, 1],    // Urso
+            24: [6, 13, 20, 2],    // Veado
+            25: [7, 14, 21, 3]     // Vaca
+        };
 
-        // Incrementa o uso do teste
-        let acessos = parseInt(localStorage.getItem('guinho_teste_count')) || 0;
-        acessos++;
-        localStorage.setItem('guinho_teste_count', acessos);
-
-        exibirSistema('teste');
-    }
-
-    function exibirSistema(tipoUsuario) {
-        document.getElementById('login-screen').style.display = "none";
-        document.getElementById('main-system').style.display = "flex";
-
-        if (tipoUsuario === 'premium') {
-            document.getElementById('share-box').style.display = "block";
-            document.getElementById('floating-buy-btn').style.display = "none";
-        } else if (tipoUsuario === 'teste') {
-            document.getElementById('share-box').style.display = "none";
-            document.getElementById('floating-buy-btn').style.display = "block";
-        }
-        document.getElementById('milhar-input').focus();
-    }
-
-    document.getElementById('password-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') verificarSenha();
-    });
-
-    // --- LÓGICA DO SISTEMA (PRESERVADA INTACTA) ---
-    const bichoNomes = ["Avestruz", "Águia", "Burro", "Borboleta", "Cachorro", "Cabra", "Carneiro", "Camelo", "Cobra", "Coelho", "Cavalo", "Elefante", "Galo", "Gato", "Jacaré", "Leão", "Macaco", "Porco", "Pavão", "Peru", "Touro", "Tigre", "Urso", "Veado", "Vaca"];
-
-    const puxadas = {
-        1: [18, 19, 20, 2], 2: [1, 3, 5, 4], 3: [2, 4, 6, 5], 4: [3, 5, 7, 6], 5: [4, 6, 8, 7],
-        6: [5, 7, 9, 8], 7: [6, 8, 10, 9], 8: [7, 9, 11, 10], 9: [18, 19, 20, 10], 10: [9, 11, 13, 12],
-        11: [10, 12, 14, 13], 12: [11, 13, 15, 14], 13: [12, 14, 16, 15], 14: [13, 15, 17, 16], 15: [14, 16, 18, 17],
-        16: [15, 17, 19, 18], 17: [16, 18, 20, 19], 18: [17, 19, 21, 20], 19: [18, 20, 22, 21], 20: [19, 21, 23, 22],
-        21: [20, 22, 24, 23], 22: [21, 23, 25, 24], 23: [22, 24, 1, 25], 24: [23, 25, 2, 1], 25: [24, 1, 3, 2]
-    };
-
-    const input = document.getElementById('milhar-input');
-    const btnClear = document.getElementById('btn-clear');
-    const infoNum = document.getElementById('info-num');
-    const infoNome = document.getElementById('info-nome');
-    const corpoTabela = document.getElementById('resultado-corpo');
-
-    function limparInput() {
-        input.value = "";
-        btnClear.style.display = "none";
-        atualizarPuxada();
-        input.focus();
-    }
-
-    function atualizarPuxada() {
-        let milhar = input.value;
-        btnClear.style.display = milhar.length > 0 ? "block" : "none";
-
-        if (milhar.length < 2) {
-            corpoTabela.innerHTML = "";
-            infoNum.innerText = "--";
-            infoNome.innerText = "AGUARDANDO";
-            return;
-        }
-
-        let dezena = parseInt(milhar.slice(-2));
-        let grupo = (dezena === 0) ? 25 : Math.ceil(dezena / 4);
-        if (isNaN(grupo)) return;
-
-        infoNum.innerText = groupText = grupo.toString().padStart(2, '0');
-        infoNome.innerText = bichoNomes[grupo - 1].toUpperCase();
-
-        corpoTabela.innerHTML = "";
-        let listaParaMostrar = puxadas[grupo] || [1, 2, 3, 4];
-
-        listaParaMostrar.forEach(g => {
-            let nomeBicho = bichoNomes[g - 1].toUpperCase();
-            let tr = document.createElement('tr');
+        // =======================================================
+        // GESTÃO DE SESSÕES E SEGURANÇA
+        // =======================================================
+        function gerenciarSessao() {
+            let statusAuth = localStorage.getItem("guinho_status"); 
+            let totalCliquesTeste = parseInt(localStorage.getItem("guinho_cliques_teste") || "0");
             
-            const dezenasBicho = g === 25 ? ["97", "98", "99", "00"] : [
-                (g * 4 - 3).toString().padStart(2, '0'),
-                (g * 4 - 2).toString().padStart(2, '0'),
-                (g * 4 - 1).toString().padStart(2, '0'),
-                (g * 4).toString().padStart(2, '0')
-            ];
+            if (statusAuth === "full") {
+                document.getElementById("loginOverlay").style.display = "none";
+                document.getElementById("comprarBtn").style.display = "none";
+                document.getElementById("compartilharBtn").style.display = "block";
+                return;
+            }
 
-            let milhares = dezenasBicho.map(dz => {
-                let prefixo = Math.floor(Math.random() * 90 + 10);
-                return `${prefixo}${dz}`;
+            let sessaoTesteAtiva = sessionStorage.getItem("guinho_sessao_teste");
+            if (sessaoTesteAtiva === "ativa") {
+                document.getElementById("loginOverlay").style.display = "none";
+                document.getElementById("comprarBtn").style.display = "block";
+                document.getElementById("compartilharBtn").style.display = "none";
+                return;
+            }
+
+            document.getElementById("loginOverlay").style.display = "flex";
+            document.getElementById("comprarBtn").style.display = "none";
+
+            let acessosRestantes = 3 - totalCliquesTeste;
+            let btnTeste = document.getElementById("btnTesteAcesso");
+            
+            if (acessosRestantes <= 0) {
+                btnTeste.disabled = true;
+                btnTeste.innerText = "Acessos de Teste Esgotados ❌";
+                btnTeste.style.backgroundColor = "#777";
+                btnTeste.style.cursor = "not-allowed";
+            } else {
+                btnTeste.innerText = `Acesso de Teste Grátis (${acessosRestantes} restantes)`;
+            }
+        }
+
+        function validarSenha() {
+            let input = document.getElementById("senhaInput").value;
+            if (input === SENHA_CORRETA) {
+                localStorage.setItem("guinho_status", "full");
+                sessionStorage.removeItem("guinho_sessao_teste");
+                gerenciarSessao();
+                calcularPuxada();
+            } else {
+                alert("Senha Incorreta! Tente novamente.");
+            }
+        }
+
+        function entrarComoTeste() {
+            let totalCliquesTeste = parseInt(localStorage.getItem("guinho_cliques_teste") || "0");
+            
+            if (totalCliquesTeste < 3) {
+                totalCliquesTeste++;
+                localStorage.setItem("guinho_cliques_teste", totalCliquesTeste);
+                sessionStorage.setItem("guinho_sessao_teste", "ativa");
+                gerenciarSessao();
+                calcularPuxada();
+            } else {
+                alert("Você já usou seus 3 acessos de teste gratuitos!");
+            }
+        }
+
+        // =======================================================
+        // OPERAÇÃO DA TABELA E CÁLCULO DAS MILHARES
+        // =======================================================
+        function calcularPuxada() {
+            let valorInput = document.getElementById("inputMilhar").value;
+            
+            if (valorInput.length > 4) {
+                valorInput = valorInput.slice(0, 4);
+                document.getElementById("inputMilhar").value = valorInput;
+            }
+
+            let dezena = parseInt(valorInput.slice(-2)) || 0;
+            if (valorInput.length < 2) dezena = parseInt(valorInput) || 0;
+
+            let grupoDoInput = gruposBicho.find(g => g.dezenas.includes(String(dezena).padStart(2, '0')));
+            if (!valorInput) { grupoDoInput = gruposBicho[23]; } // Inicia com o Veado padrão
+
+            document.getElementById("txtNumeroGrupo").innerText = grupoDoInput ? grupoDoInput.id : "--";
+            document.getElementById("txtNomeGrupo").innerText = grupoDoInput ? grupoDoInput.nome.toUpperCase() : "NENHUM";
+
+            // Busca exatamente os 4 grupos da nova lista fornecida
+            let idsPuxados = grupoDoInput ? (tabelaPuxadas[grupoDoInput.id] || [8, 15, 22, 4]) : [8, 15, 22, 4];
+            let gruposPuxados = idsPuxados.map(id => gruposBicho.find(g => g.id === id));
+
+            const corpoTabela = document.getElementById("corpoTabela");
+            corpoTabela.innerHTML = "";
+
+            gruposPuxados.forEach(grupo => {
+                if(!grupo) return;
+                let milharesGeradas = [];
+
+                grupo.dezenas.forEach(dezenaOficial => {
+                    let doisPrimeirosDigitos = String(Math.floor(Math.random() * 100)).padStart(2, '0');
+                    let milharCompleta = doisPrimeirosDigitos + dezenaOficial;
+                    milharesGeradas.push(milharCompleta);
+                });
+
+                let tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td style="color: #004d26; text-align: left; padding-left: 20px;">
+                        <strong>${grupo.id}</strong> - ${grupo.nome.toUpperCase()}
+                    </td>
+                    <td>${milharesGeradas[0]}</td>
+                    <td>${milharesGeradas[1]}</td>
+                    <td>${milharesGeradas[2]}</td>
+                    <td>${milharesGeradas[3]}</td>
+                `;
+                corpoTabela.appendChild(tr);
+            });
+        }
+
+        function limparInput() {
+            document.getElementById("inputMilhar").value = "";
+            calcularPuxada();
+            document.getElementById("inputMilhar").focus();
+        }
+
+        function compartilharMilhares() {
+            let textoCompartilhar = "🍀 *MILHAR MILIONÁRIA DO GUINHO* 🍀\n\nConfira as melhores milhares recomendadas:\n\n";
+            const linhas = document.querySelectorAll("#corpoTabela tr");
+
+            linhas.forEach(linha => {
+                const colunas = linha.querySelectorAll("td");
+                if(colunas.length > 0) {
+                    let grupo = colunas[0].innerText.trim();
+                    let m1 = colunas[1].innerText;
+                    let m2 = colunas[2].innerText;
+                    let m3 = colunas[3].innerText;
+                    let m4 = colunas[4].innerText;
+                    textoCompartilhar += `🔹 *${grupo}* -> ${m1} | ${m2} | ${m3} | ${m4}\n`;
+                }
             });
 
-            tr.innerHTML = `
-                <td class="td-grupo">${g.toString().padStart(2, '0')} - ${nomeBicho}</td>
-                ${milhares.map(m => `<td>${m}</td>`).join('')}
-            `;
-            corpoTabela.appendChild(tr);
-        });
-    }
+            textoCompartilhar += "\nBoa sorte! Vá e ganhe o seu milhão! 💰";
 
-    async function compartilharResultados() {
-        const milharDigitada = input.value;
-        if (!milharDigitada) {
-            alert("Digite uma milhar primeiro!");
-            return;
+            navigator.clipboard.writeText(textoCompartilhar).then(() => {
+                alert("Milhares copiadas com sucesso!");
+            }).catch(err => {
+                alert("Erro ao copiar: ", err);
+            });
         }
 
-        let texto = `🍀 *MILHAR MILIONÁRIA DO GUINHO* 🍀\n\n`;
-        texto += `Milhar da Extração: *${milharDigitada}*\n`;
-        texto += `Bicho: ${infoNome.innerText}\n\n`;
-        texto += `🚀 *SUGESTÕES DE PUXADA:*\n`;
-
-        const linhas = document.querySelectorAll('#resultado-corpo tr');
-        linhas.forEach(linha => {
-            const cells = linha.querySelectorAll('td');
-            const bichoInfo = cells[0].innerText.replace('\n', ' ');
-            texto += `\n*${bichoInfo}*:\n`;
-            texto += `👉 ${cells[1].innerText} - ${cells[2].innerText} - ${cells[3].innerText} - ${cells[4].innerText}\n`;
+        // PROTEÇÃO DO CÓDIGO FONTE
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; }
         });
 
-        texto += `\nBoa sorte! 💰\n_Criado por Guinho Do Bicho_`;
-
-        if (navigator.share) {
-            try {
-                await navigator.share({ title: 'Milhar do Guinho', text: texto });
-            } catch (err) { console.log("Cancelado"); }
-        } else {
-            navigator.clipboard.writeText(texto);
-            alert("Resultados copiados! Cole no WhatsApp.");
-        }
-    }
-
-    input.addEventListener('input', () => {
-        if (input.value.length > 4) input.value = input.value.slice(0, 4);
-        atualizarPuxada();
-    });
-</script>
+        window.onload = function() {
+            gerenciarSessao();
+            calcularPuxada();
+        };
+    </script>
 </body>
 </html>
