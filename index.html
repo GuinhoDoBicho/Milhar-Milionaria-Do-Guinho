@@ -336,6 +336,70 @@
             margin-top: 40px;
         }
 
+        /* =======================================================
+           ESTILIZAÇÃO DA NOVA SEÇÃO DE INFORMAÇÕES (TEXTO DO USUÁRIO)
+           ======================================================= */
+        .secao-explicativa {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .secao-explicativa h2, .secao-explicativa h3 {
+            color: #004d26;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            font-size: 18px;
+        }
+
+        .secao-explicativa h3 {
+            font-size: 16px;
+            margin-top: 25px;
+        }
+
+        .secao-explicativa p {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .secao-explicativa ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .secao-explicativa li {
+            margin-bottom: 10px;
+        }
+
+        .secao-explicativa .alerta-importante {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .secao-explicativa .texto-alerta {
+            border-left: 4px solid #d32f2f;
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            color: #c62828;
+        }
+
+        .secao-explicativa .pergunta-final {
+            font-style: italic;
+            font-weight: bold;
+            color: #555;
+            margin-top: 20px;
+        }
+
         /* RESPONSIVIDADE PARA TELEMÓVEL */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 15px; text-align: center; }
@@ -348,6 +412,9 @@
                 bottom: 0; right: 0; left: 0;
                 border-radius: 0; font-size: 13px; padding: 14px;
                 border: none; border-top: 2px solid white;
+            }
+            .secao-explicativa {
+                margin: 20px 20px 80px 20px; /* Margem extra no fundo se for mobile por causa do botão de compra */
             }
         }
     </style>
@@ -455,10 +522,33 @@
         Milhar Milionária do Guinho © 2026 - Todos os direitos reservados. | Jogue com responsabilidade.
     </footer>
 
+    <div class="secao-explicativa">
+        <h2>O que são as "Puxadas do Jogo do Bicho"?</h2>
+        <p>As "puxadas" no Jogo do Bicho são um tipo de superstição ou estratégia usada por apostadores para tentar prever quais números ou animais podem ser sorteados com base nos resultados anteriores. Essa prática é bastante comum entre jogadores experientes e funciona como uma espécie de "análise de tendências" empírica, mesmo que não tenha base científica ou probabilística sólida.</p>
+        
+        <h3>Como elas funcionam?</h3>
+        <p>No caso da puxada acima, os bichos estão listados em ordem crescente com as puxadas sendo definidas no formato 8-7-7-7-7, ou seja, o primeiro animal a ser puxado é o oitavo da lista, o segundo animal é o sétimo contando a partir do primeiro que foi puxado e assim por diante.</p>
+        
+        <p>Então, com a tabela criada, agora é questão de como interpretar ela:</p>
+        <ul>
+            <li><strong>Relação entre bichos:</strong> Muitos jogadores acreditam que há conexões ou padrões entre os números e os bichos sorteados. Por exemplo, se um animal é sorteado, outro animal que supostamente tem uma "ligação" com ele pode ser escolhido como aposta para o próximo sorteio.</li>
+            <li><strong>Números que "puxam" outros números:</strong> Alguns apostadores analisam os últimos resultados para tentar identificar um padrão. Por exemplo, acreditam que, se determinado grupo ou número foi sorteado, existe uma tendência para que outros números associados a ele sejam sorteados em seguida.</li>
+            <li><strong>Superstições regionais:</strong> Em diferentes localidades, as puxadas podem variar, dependendo de tradições e do que os jogadores locais acreditam ser padrões recorrentes.</li>
+            <li><strong>Análise por sequência:</strong> Alguns tentam observar repetições ou intervalos de tempo entre a aparição de certos bichos ou números e baseiam suas apostas nisso.</li>
+        </ul>
+        
+        <h3>Exemplo de "puxada":</h3>
+        <p><strong>Bicho que puxa outro bicho:</strong> Dizem que se sair o Cachorro, ele "puxa" a Cabra, o Tigre, a Cobra, o Leão ou o Peru no próximo sorteio.</p>
+        
+        <h3 class="alerta-importante">Porém é IMPORTANTE SABER:</h3>
+        <p class="texto-alerta">Embora os apostadores confiem em suas "puxadas", vale lembrar que o Jogo do Bicho é um jogo de azar, e os resultados são aleatórios. Isso significa que essas estratégias são mais baseadas em crenças do que em probabilidades reais. Por isso, no final das contas vale a interpretação de cada pessoa, além do fato de que nunca é certeza que determinado animal sairá no próximo sorteio por estar sendo citado em uma lista.</p>
+        
+        <p class="pergunta-final">E você, o que acha ?</p>
+    </div>
+
     <script>
         const SENHA_CORRETA = "M1LHARM1L1ONAR1A";
 
-        // Lista de grupos e dezenas oficiais do Jogo do Bicho
         const gruposBicho = [
             { id: 1, nome: "Avestruz", dezenas: ["01", "02", "03", "04"] },
             { id: 2, nome: "Águia", dezenas: ["05", "06", "07", "08"] },
@@ -487,38 +577,15 @@
             { id: 25, nome: "Vaca", dezenas: ["97", "98", "99", "00"] }
         ];
 
-        // PADRÃO DE PUXADAS FIXAS ATUALIZADO COM EXATAMENTE 4 GRUPOS POR BICHO
         const tabelaPuxadas = {
-            1: [8, 15, 22, 4],     // Avestruz
-            2: [9, 16, 23, 5],     // Águia
-            3: [10, 17, 24, 6],    // Burro
-            4: [11, 18, 25, 7],    // Borboleta
-            5: [12, 19, 1, 8],     // Cachorro
-            6: [13, 20, 2, 9],     // Cabra
-            7: [14, 21, 3, 10],    // Carneiro
-            8: [15, 22, 4, 11],    // Camelo
-            9: [16, 23, 5, 12],    // Cobra
-            10: [17, 24, 6, 13],   // Coelho
-            11: [18, 25, 7, 14],   // Cavalo
-            12: [19, 1, 8, 15],    // Elefante
-            13: [20, 2, 9, 16],    // Galo
-            14: [21, 3, 10, 17],   // Gato
-            15: [22, 4, 11, 18],   // Jacaré
-            16: [23, 5, 12, 19],   // Leão
-            17: [24, 6, 13, 20],   // Macaco
-            18: [25, 7, 14, 21],   // Porco
-            19: [1, 8, 15, 22],    // Pavão
-            20: [2, 9, 16, 23],    // Peru
-            21: [3, 10, 17, 24],   // Touro
-            22: [4, 11, 18, 25],   // Tigre
-            23: [5, 12, 19, 1],    // Urso
-            24: [6, 13, 20, 2],    // Veado
-            25: [7, 14, 21, 3]     // Vaca
+            1: [8, 15, 22, 4], 2: [9, 16, 23, 5], 3: [10, 17, 24, 6], 4: [11, 18, 25, 7], 5: [12, 19, 1, 8],
+            6: [13, 20, 2, 9], 7: [14, 21, 3, 10], 8: [15, 22, 4, 11], 9: [16, 23, 5, 12], 10: [17, 24, 6, 13],
+            11: [18, 25, 7, 14], 12: [19, 1, 8, 15], 13: [20, 2, 9, 16], 14: [21, 3, 10, 17], 15: [22, 4, 11, 18],
+            16: [23, 5, 12, 19], 17: [24, 6, 13, 20], 18: [25, 7, 14, 21], 19: [1, 8, 15, 22], 20: [2, 9, 16, 23],
+            21: [3, 10, 17, 24], 22: [4, 11, 18, 25], 23: [5, 12, 19, 1], 24: [6, 13, 20, 2], 25: [7, 14, 21, 3]
         };
 
-        // =======================================================
-        // GESTÃO DE SESSÕES E SEGURANÇA
-        // =======================================================
+        // GESTÃO DE SESSÕES
         function gerenciarSessao() {
             let statusAuth = localStorage.getItem("guinho_status"); 
             let totalCliquesTeste = parseInt(localStorage.getItem("guinho_cliques_teste") || "0");
@@ -580,9 +647,7 @@
             }
         }
 
-        // =======================================================
-        // OPERAÇÃO DA TABELA E CÁLCULO DAS MILHARES
-        // =======================================================
+        // OPERAÇÃO DA TABELA
         function calcularPuxada() {
             let valorInput = document.getElementById("inputMilhar").value;
             
@@ -595,12 +660,11 @@
             if (valorInput.length < 2) dezena = parseInt(valorInput) || 0;
 
             let grupoDoInput = gruposBicho.find(g => g.dezenas.includes(String(dezena).padStart(2, '0')));
-            if (!valorInput) { grupoDoInput = gruposBicho[23]; } // Inicia com o Veado padrão
+            if (!valorInput) { grupoDoInput = gruposBicho[23]; } 
 
             document.getElementById("txtNumeroGrupo").innerText = grupoDoInput ? grupoDoInput.id : "--";
             document.getElementById("txtNomeGrupo").innerText = grupoDoInput ? grupoDoInput.nome.toUpperCase() : "NENHUM";
 
-            // Busca exatamente os 4 grupos da nova lista fornecida
             let idsPuxados = grupoDoInput ? (tabelaPuxadas[grupoDoInput.id] || [8, 15, 22, 4]) : [8, 15, 22, 4];
             let gruposPuxados = idsPuxados.map(id => gruposBicho.find(g => g.id === id));
 
@@ -639,9 +703,9 @@
 
         function compartilharMilhares() {
             let textoCompartilhar = "🍀 *MILHAR MILIONÁRIA DO GUINHO* 🍀\n\nConfira as melhores milhares recomendadas:\n\n";
-            const linhas = document.querySelectorAll("#corpoTabela tr");
+            const milharesLinhas = document.querySelectorAll("#corpoTabela tr");
 
-            linhas.forEach(linha => {
+            milharesLinhas.forEach(linha => {
                 const colunas = linha.querySelectorAll("td");
                 if(colunas.length > 0) {
                     let grupo = colunas[0].innerText.trim();
